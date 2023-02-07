@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MoMo Payment</title>
+        <style>
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            form {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            input {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background-color: #f5f5f5;
+                color: #000;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            input:hover {
+                background-color: #000;
+                color: #fff;
+            }
+
+            #img {
+                display: block;
+                margin: auto;
+                width: 50%;
+                height: 600px;
+            }
+        </style>
+    </head>
+    <body>
+        <img id="img" src="./mac.jpeg" alt="macbook" />
+        <div id="root"></div>
+        <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+        <script>
+            const App = () => {
+                return React.createElement(
+                    "div",
+                    { className: "container" },
+                    React.createElement(
+                        "form",
+                        {
+                            method: "post",
+                            target: "_self",
+                            encType: "application/x-www-form-urlencoded",
+                            id: "momo-form",
+                            action: "/buy",
+                        },
+                        React.createElement("input", {
+                            type: "submit",
+                            value: "Pay with MoMo",
+                            id: "payWithMoMo",
+                        })
+                    )
+                );
+            };
+
+            const container = document.getElementById("root");
+            const root = ReactDOM.createRoot(container);
+            root.render(React.createElement(App));
+        </script>
+    </body>
+</html>

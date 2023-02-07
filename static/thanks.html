@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+            integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <style>
+            body {
+                margin: 0;
+            }
+
+            .thank-u {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+            }
+            .thumb {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .thanks {
+                font-family: Arial;
+                font-weight: bold;
+                font-size: 56px;
+                letter-spacing: 11px;
+                text-shadow: #a3a3a3 1px 1px 1px;
+                /* or 140% */
+
+                /* text-align: center;
+                letter-spacing: -0.03em; */
+
+                /* color: #121214; */
+            }
+            #receipt {
+                position: absolute;
+                top: 200px;
+
+                font-family: "Poppins";
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 28px;
+                /* or 140% */
+
+                display: flex;
+                align-items: center;
+                text-align: center;
+
+                color: #4a4a51;
+            }
+
+            footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: "Poppins";
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 28px;
+                /* or 140% */
+
+                display: flex;
+                align-items: center;
+                text-align: center;
+            }
+            .thanks .block-line > span {
+                display: inline-block;
+            }
+
+            .thanks-div {
+                position: absolute;
+                width: 600px;
+                height: 168px;
+                top: 50px;
+                margin-top: 0;
+            }
+
+            #receipt-span {
+                color: #ff0000;
+                cursor: pointer;
+            }
+            .back {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                padding: 30px;
+                cursor: pointer;
+            }
+
+            .back a {
+                color: #000;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="thank-u">
+            <div class="back">
+                <a href="/"><i class="fa-solid fa-circle-arrow-left"></i></a>
+            </div>
+            <div class="thanks-div">
+                <div class="thanks" style="text-align: center">
+                    <span class="block-line"
+                        ><span
+                            ><span style="color: #80ed12">T</span
+                            ><span style="color: #a5d604">h</span
+                            ><span style="color: #c7b601">a</span
+                            ><span style="color: #e39209">n</span
+                            ><span style="color: #f66c1c">k&nbsp;</span></span
+                        ><span
+                            ><span style="color: #fe4838">Y</span
+                            ><span style="color: #fb295b">o</span
+                            ><span style="color: #ed1180">u&nbsp;</span></span
+                        ><span
+                            ><span style="color: #d504a6">F</span
+                            ><span style="color: #b601c8">o</span
+                            ><span style="color: #910ae3">r&nbsp;</span></span
+                        ><span
+                            ><span style="color: #6b1df6">Y</span
+                            ><span style="color: #4739fe">o</span
+                            ><span style="color: #285bfb">u</span
+                            ><span style="color: #1181ed">r&nbsp;</span></span
+                        ><span
+                            ><span style="color: #03a6d5">P</span
+                            ><span style="color: #1181ed">u</span
+                            ><span style="color: #285bfb">r</span
+                            ><span style="color: #4739fe">c</span
+                            ><span style="color: #6b1df6">h</span
+                            ><span style="color: #910ae3">a</span
+                            ><span style="color: #b601c8">s</span
+                            ><span style="color: #d504a6">e</span></span
+                        ></span
+                    >
+                </div>
+            </div>
+            <div id="receipt">
+                <h2>Here is your <span id="receipt-span">receipt</span></h2>
+            </div>
+            <footer>EDUCATION IS DEDICATED</footer>
+            <img src="./Thumb.svg" alt="" class="thumb" />
+        </div>
+    </body>
+</html>
