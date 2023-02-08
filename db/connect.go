@@ -14,6 +14,10 @@ const (
 )
 
 type ConnectDB struct {
+	db *sql.DB
+}
+
+type TransactionTx struct {
 	tx *sql.Tx
 }
 
@@ -36,19 +40,20 @@ func Connect() *sql.DB {
 	return db
 }
 
-func BeginTx() *sql.Tx {
-	db := Connect()
-	tx, err := db.Begin()
+func NewDB() *ConnectDB {
+	return &ConnectDB{db: Connect()}
+}
+
+func BeginTx(db *ConnectDB) *sql.Tx {
+	tx, err := db.db.Begin()
 	if err != nil {
 		fmt.Println(err)
 		return tx
 	}
 
-	defer db.Close()
-
 	return tx
 }
 
-func NewDB() *ConnectDB {
-	return &ConnectDB{tx: BeginTx()}
+func NewTx(db *ConnectDB) *TransactionTx {
+	return &TransactionTx{tx: BeginTx(db)}
 }

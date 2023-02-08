@@ -12,16 +12,12 @@ type MomoPayment struct {
 	DateUpdated int64  `json:"dateUpdated"`
 }
 
-func (c *ConnectDB) CreateMomoPayment(data MomoPayment) (err error) {
+func (c *TransactionTx) CreateMomoPayment(data MomoPayment) (err error) {
 	date := ConvertUnixDateToString(time.Now().Unix())
 	_, err = c.tx.Exec("INSERT INTO momo_payment (order_id, request_id, trans_id, amount, pay_type, date_created, date_updated) VALUES (?, ?, ?, ?, ?, ?, ?)", data.OderID, data.RequestID, data.TransID, data.Amount, data.PayType, date, nil)
 	if err != nil {
 		return c.tx.Rollback()
 	}
-	return nil
-}
-
-func (c *ConnectDB) Commit() (err error) {
 	return c.tx.Commit()
 }
 

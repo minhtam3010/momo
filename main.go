@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 
 	//run for download library `go get github.com/sony/sonyflake`
+
 	"github.com/minhtam3010/momo/middleware"
 	"github.com/sony/sonyflake"
 )
@@ -63,6 +65,17 @@ NwIDAQAB
 -----END PUBLIC KEY-----
 `)
 
+func encodeToBase64(v interface{}) (string, error) {
+	var buf bytes.Buffer
+	encoder := base64.NewEncoder(base64.StdEncoding, &buf)
+	err := json.NewEncoder(encoder).Encode(v)
+	if err != nil {
+		return "", err
+	}
+	encoder.Close()
+	return buf.String(), nil
+}
+
 func ProcessMoMo(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Hello Momo!\n")
 
@@ -72,36 +85,42 @@ func ProcessMoMo(w http.ResponseWriter, r *http.Request) {
 	b, err := flake.NextID()
 
 	// QR Pay
-	var endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
-	var partnerCode = "MOMO"
-	var accessKey = "F8BBA842ECF85"
-	var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
-	var orderInfo = "pay with MoMo"
-	var redirectUrl = "http://localhost:5500/thanks"
-	var ipnUrl = "http://localhost:5500/thanks"
-	var amount = "50000"
-	var requestType = "captureWallet"
-	var extraData = "" // pass empty value or Encode base64 JsonString
-	var partnerName = "MoMo Payment"
-
-	/* Pay with all Methods*/
 	// var endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
+	// var partnerCode = "MOMO"
 	// var accessKey = "F8BBA842ECF85"
 	// var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
 	// var orderInfo = "pay with MoMo"
-	// var partnerCode = "MOMO"
-	// var redirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b"
-	// var ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b"
+	var redirectUrl = "http://localhost:5500/thanks"
+	var ipnUrl = "http://localhost:5500/thanks"
 	// var amount = "50000"
+	// var requestType = "captureWallet"
+	// var extraData = "" // pass empty value or Encode base64 JsonString
+	// var partnerName = "MoMo Payment"
+
+	/* Pay with all Methods*/
+	var endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
+	var accessKey = "F8BBA842ECF85"
+	var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
+	var orderInfo = "pay with MoMo"
+	var partnerCode = "MOMO"
+	var amount = "50000"
+	var extraData = ""
+	var partnerName = "MoMo Payment"
+	var requestType = "payWithMethod"
+
+	// Dont comment this one
 	var orderId = strconv.FormatUint(a, 16)
 	var requestId = strconv.FormatUint(b, 16)
-	// var extraData = ""
-	// var partnerName = "MoMo Payment"
 	var storeId = "Test Store"
 	var orderGroupId = ""
 	var autoCapture = true
 	var lang = "vi"
-	// var requestType = "payWithMethod"
+	userInfo, err := encodeToBase64(middleware.UserInfo{
+		FullName: "Nguyen Van A",
+		Email:    "nguyenvana@gmail.com",
+		Phone:    "0901234567",
+	})
+	extraData = userInfo
 
 	//build raw signature
 	var rawSignature bytes.Buffer
@@ -130,7 +149,10 @@ func ProcessMoMo(w http.ResponseWriter, r *http.Request) {
 	hmac := hmac.New(sha256.New, []byte(secretKey))
 
 	// Write Data to it
-	hmac.Write(rawSignature.Bytes())
+	_, err = hmac.Write(rawSignature.Bytes())
+	if err != nil {
+		panic(err)
+	}
 	// fmt.Println("Raw signature: " + rawSignature.String())
 
 	// Get result and encode as hexadecimal string
@@ -172,7 +194,7 @@ func ProcessMoMo(w http.ResponseWriter, r *http.Request) {
 	//result
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
-	fmt.Println("Response from Momo: ", result)
+	// fmt.Println("Response from Momo: ", result)
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -187,7 +209,6 @@ func main() {
 	mux.Handle("/", http.FileServer(http.Dir("./static")))
 	mux.HandleFunc("/buy", ProcessMoMo)
 	mux.HandleFunc("/thanks", handler.CreateTransactionMomo)
-	mux.HandleFunc("/commit", handler.Commit)
 
 	http.ListenAndServe(":5500", mux)
 }
